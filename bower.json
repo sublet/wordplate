@@ -1,0 +1,19 @@
+{
+  "name": "wordplate",
+  "version": "0.0.1",
+  "homepage": "https://github.com/sublet/wordplate",
+  "authors": [
+    "Jeffrey Hunter <sublet@me.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}

@@ -24,17 +24,17 @@ var theme = 'THEME_FOLDER';
 
 var paths = {
   'root':         "wp-content/themes/"+theme+"/assets/",
-  'js': { 
+  'js': {
     "src_watch":  "wp-content/themes/"+theme+"/assets/js/**",
     "src":        "wp-content/themes/"+theme+"/assets/js/**.dev.js",
     "dest":       "wp-content/themes/"+theme+"/js/"
   },
-  'scss': { 
+  'scss': {
     "src_watch":  "wp-content/themes/"+theme+"/assets/sass/**",
     "src":        "wp-content/themes/"+theme+"/assets/sass/**.dev.scss",
     "dest":       "wp-content/themes/"+theme+"/css/"
   },
-  'img': { 
+  'img': {
     "src_watch":  "wp-content/themes/"+theme+"/assets/img/**/*",
     "src":        "wp-content/themes/"+theme+"/assets/img/**/*",
     "dest":       "wp-content/themes/"+theme+"/img/"
@@ -45,7 +45,7 @@ var paths = {
 gulp.task('sass', function(){
   return gulp.src(paths.scss.src)
 
-    .pipe(cache('styles'))
+    .pipe(cache('sass'))
     .pipe(sass({ outputStyle: 'expanded', errLogToConsole: true }))
     .pipe(autoprefix('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
     .pipe(minifyCSS())
@@ -68,7 +68,7 @@ gulp.task('sass', function(){
 // JS
 gulp.task('js', function(){
   return gulp.src(paths.js.src)
-    .pipe(cache('scripts'))
+    .pipe(cache('js'))
     .pipe(include())
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
@@ -101,13 +101,13 @@ gulp.task('img', function() {
 
 //Run the tasks listed above
 gulp.task('default', function(){
-  gulp.start('styles','scripts','img');
+  gulp.start('sass','js','img');
 });
 
 //Watch for changes and reload the page
 gulp.task('watch', function(){
-  gulp.watch(paths.scss.src_watch, ['styles']);
-  gulp.watch(paths.js.src_watch, ['scripts']);
+  gulp.watch(paths.scss.src_watch, ['sass']);
+  gulp.watch(paths.js.src_watch, ['js']);
   gulp.watch(paths.img.src_watch, ['img']);
 });
 
@@ -120,7 +120,7 @@ gulp.task('server:dev', function() {
 });
 
 //Task That Runs the Processes Listed Above
-gulp.task('devBuild', ['styles', 'scripts']);
+gulp.task('devBuild', ['sass', 'js']);
 
 //Run the Dev Build Task and Then Fire up a Server
 //Use the --notify flag to show messages on task completion

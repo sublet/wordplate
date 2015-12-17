@@ -18,6 +18,8 @@ var gulp      = require('gulp'),
   plumber       = require('gulp-plumber')
   browserSync   = require('browser-sync'),
   imagemin      = require('gulp-imagemin'),
+  argv          = require('yargs').argv,
+  gulpif        = require('gulp-if'),
   reload        = browserSync.reload;
 
 var theme = 'THEME_FOLDER';
@@ -44,56 +46,31 @@ var paths = {
 // SASS
 gulp.task('sass', function(){
   return gulp.src(paths.scss.src)
-
-    .pipe(cache('sass'))
-    .pipe(sass({ outputStyle: 'expanded', errLogToConsole: true }))
-    .pipe(autoprefix('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(minifyCSS())
-    .pipe(gulp.dest(paths.scss.dest))
-    //.pipe(reload({stream:true}))
-    .pipe(gulpif(argv.notify, notify({onLast: true, message: 'SCSS compiled!'})));
-
-    /*.pipe(cache('styles'))
-    .pipe(plumber())
     .pipe(sass({includePaths: [bourbon,neat], outputStyle: 'expanded', errLogToConsole: true}))
     .pipe(autoprefix('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
     .pipe(rename(function(path) { path.basename = path.basename.replace('.dev', '') }))
-    .pipe(gulp.dest(paths.scss.dest))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifyCSS())
     .pipe(gulp.dest(paths.scss.dest))
-    .pipe(notify({onLast: true, message: 'CSS compiled!'}));*/
+    .pipe(gulpif(argv.notify, notify({onLast: true, message: 'SCSS compiled!'})));
 });
 
 // JS
 gulp.task('js', function(){
   return gulp.src(paths.js.src)
-    .pipe(cache('js'))
     .pipe(include())
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.js.dest))
-    //.pipe(reload({stream:true}))
-    .pipe(gulpif(argv.notify, notify({onLast: true, message: 'JS linted!'})));
-
-    /*.pipe(cache('scripts'))
-    .pipe(plumber())
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish))
-    .pipe(include())
     .pipe(rename(function(path) { path.basename = path.basename.replace('.dev', '') }))
-    .pipe(gulp.dest(paths.js.dest))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest(paths.js.dest))
-    .pipe(notify({onLast: true, message: "JS linted, concatenated, and minfied!"}))*/
+    .pipe(gulpif(argv.notify, notify({onLast: true, message: 'JS linted!'})));
 });
 
 //Process Images
 gulp.task('img', function() {
   return gulp.src(paths.img.src)
-    .pipe(cache('images'))
     .pipe(imagemin())
     .pipe(gulp.dest(paths.img.dest))
     .pipe(notify({onLast: true, message: "Images crunched!"}))
@@ -120,7 +97,7 @@ gulp.task('server:dev', function() {
 });
 
 //Task That Runs the Processes Listed Above
-gulp.task('devBuild', ['sass', 'js']);
+gulp.task('devBuild', ['sass', 'js', 'img']);
 
 //Run the Dev Build Task and Then Fire up a Server
 //Use the --notify flag to show messages on task completion

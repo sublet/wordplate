@@ -43,33 +43,40 @@ then
   mysql -u root -ppassword ltp_wordpress < /var/www/bin/database.sql
 fi
 
-# Download wordpress
-wget http://wordpress.org/latest.tar.gz
-tar xfz latest.tar.gz
-mv wordpress/* /var/www/
-rm -rf wordpress
-rm -f latest.tar.gz
+if [ ! -f /var/www/wp-config.php ];
+then
 
-# Setup File structure in Theme
-mkdir "/var/www/wp-content/themes/$1"
-mkdir "/var/www/wp-content/themes/$1/assets"
-mkdir "/var/www/wp-content/themes/$1/assets/coffee"
-mkdir "/var/www/wp-content/themes/$1/assets/sass"
-mkdir "/var/www/wp-content/themes/$1/assets/img"
-mkdir "/var/www/wp-content/themes/$1/assets/bower_components"
+  echo "THIS IS A BRAND NEW INSTALL...TREAT IT AS SUCH!!!"
 
-# Replace stuff in wp-config, bower, and gulpfule
+  # # Download wordpress
+  # wget http://wordpress.org/latest.tar.gz
+  # tar xfz latest.tar.gz
+  # mv wordpress/* /var/www/
+  # rm -rf wordpress
+  # rm -f latest.tar.gz
 
-perl -pi -e "s/THEME_FOLDER/$1/g" /var/www/.bowerrc
-perl -pi -e "s/THEME_FOLDER/$1/g" /var/www/gulpfile.js
-mv /var/www/wp-config-sample.php /var/www/wp-config.php
-perl -pi -e "s/database_name_here/wordpress/g" /var/www/wp-config.php
-perl -pi -e "s/username_here/wp_user/g" /var/www/wp-config.php
-perl -pi -e "s/password_here/password/g" /var/www/wp-config.php
+  # # Setup File structure in Theme
+  # mkdir "/var/www/wp-content/themes/$1"
+  # mkdir "/var/www/wp-content/themes/$1/assets"
+  # mkdir "/var/www/wp-content/themes/$1/assets/coffee"
+  # mkdir "/var/www/wp-content/themes/$1/assets/sass"
+  # mkdir "/var/www/wp-content/themes/$1/assets/img"
+  # mkdir "/var/www/wp-content/themes/$1/assets/bower_components"
 
-# Replace stuff in wp-config, bower, and gulpfule
-rm "/var/www/wp-content/themes/twentyfourteen"
-rm "/var/www/wp-content/themes/twentythirteen"
+  # # Replace stuff in wp-config, bower, and gulpfule
+
+  # perl -pi -e "s/THEME_FOLDER/$1/g" /var/www/.bowerrc
+  # perl -pi -e "s/THEME_FOLDER/$1/g" /var/www/gulpfile.js
+  # mv /var/www/wp-config-sample.php /var/www/wp-config.php
+  # perl -pi -e "s/database_name_here/wordpress/g" /var/www/wp-config.php
+  # perl -pi -e "s/username_here/wp_user/g" /var/www/wp-config.php
+  # perl -pi -e "s/password_here/password/g" /var/www/wp-config.php
+
+  # # Replace stuff in wp-config, bower, and gulpfule
+  # rm "/var/www/wp-content/themes/twentyfourteen"
+  # rm "/var/www/wp-content/themes/twentythirteen"
+
+fi
 
 echo ''
 echo '#####################################################'
